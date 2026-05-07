@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: pricetracker-db
+    environment:
+      - POSTGRES_DB=pricetracker
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=qwerty
+    ports:
+      - "5433:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d pricetracker" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  app:
+    build: .
+    container_name: pricetracker-app
+    ports:
+      - "8080:8080"
+    environment:
+      - DB_URL=jdbc:postgresql://db:5432/pricetracker
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=qwerty
+      - TELEGRAM_BOT_TOKEN=TELEGRAM_BOT_TOKEN
+      - BOT_USERNAME=jvpricetracker_bot
+      - CHAT_ID=1247124357
+    depends_on:
+      - db
