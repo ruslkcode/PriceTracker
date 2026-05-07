@@ -42,3 +42,13 @@ A professional backend monitoring solution designed to track retail product pric
    ```bash
    git clone [https://github.com/ruslkcode/PriceTracker.git](https://github.com/ruslkcode/PriceTracker.git)
    cd PriceTracker
+2. **Build the Docker image
+docker build -t price-tracker .
+
+3. **Run the container with your variables
+docker run -d --name price-tracker-app \
+  -e TELEGRAM_BOT_TOKEN=your_new_token_here \
+  -e DB_USERNAME=your_db_user \
+  -e DB_PASSWORD=your_db_pass \
+  -p 8080:8080 \
+  price-tracker
